@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.webp">
+    <link rel="icon" type="image/webp" sizes="32x32" href="images/favicon-32x32.webp">
+    <link rel="icon" type="image/webp" sizes="16x16" href="images/favicon-16x16.webp">
+    <title>Hangman Game with Redis</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="scripts/local.js" defer></script>
+    <script src="scripts/cloud.js" defer></script>
+    <script src="scripts/apis.js" defer></script>
+    <script src="scripts/script.js" defer></script>
+</head>
+<body>
+    <div class="name-modal">
+        <div class="content">
+            <div class="player-name-container">
+                <label for="player-name">Player name:</label>
+            </div>
+            <input type="text" id="player-name" placeholder="Enter your name">
+            <button id="confirm-name" class="confirm-button">Confirm</button>
+        </div>
+    </div>
+    <div class="redis-logo">
+        <img src="images/redis.png" alt="Redis Logo">
+    </div>
+    <div class="game-modal" tabindex="0">
+        <div class="content">
+            <img src="#" alt="gif">
+            <h4>Game Over!</h4>
+            <p>The correct word was: <b>rainbow</b></p>
+            <button class="play-again">Play Again</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="hangman-box">
+            <img src="#" draggable="false" alt="hangman-img">
+            <h1>Player: <span id="player-name-display" style="cursor: pointer; text-decoration: underline;" title="Click to update your player name"></span></h1>
+        </div>
+        <div class="game-box">
+            <ul class="word-display"></ul>
+            <h4 class="hint-text"><b></b></h4>
+            <h4 class="guesses-text">Incorrect guesses: <b></b></h4>
+            <div class="keyboard"></div>
+        </div>
+    </div>
+    <div id="scoreboard-modal" class="scoreboard-modal">
+        <div class="modal-content">
+            <h2>Scoreboard</h2>
+            <hr>
+            <table id="scoreboard-table">
+                <thead>
+                <tr>
+                    <th class="rank-column" style="text-align: center;">Rank</th>
+                    <th class="player-column">Player</th>
+                    <th class="score-column" style="text-align: center;">Score</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Scoreboard items will be dynamically inserted here -->
+                </tbody>
+            </table>
+            <button id="closeScoreboardModal" class="confirm-button" onclick="hideScoreboardModal()">Close</button>
+        </div>
+    </div>
+
+    <div id="metrics-modal" class="metrics-modal">
+        <div class="modal-content">
+            <h2>Metrics</h2>
+            <hr>
+            <div class="metrics-container">
+                <div class="metrics-table">
+                    <h3>Guess Count</h3>
+                    <table id="guess-attempts-table">
+                        <thead>
+                            <tr>
+                                <th class="guess-attempt-column">Guess Attempt</th>
+                                <th class="count-column" style="text-align: center;">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Guess attempts metrics will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="metrics-table">
+                    <h3>Duration Count</h3>
+                    <table id="duration-count-table">
+                        <thead>
+                        <tr>
+                            <th class="duration-column">Game Duration</th>
+                            <th class="count-column" style="text-align: center;">Count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Duration count metrics will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="metrics-table">
+                    <h3>Top Failed Words</h3>
+                    <table id="failed-words-table">
+                        <thead>
+                            <tr>
+                                <th class="word-column">Word</th>
+                                <th class="failure-count-column" style="text-align: center;">Failures</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Tricky words will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button id="closeMetricsModal" class="confirm-button" onclick="hideMetricsModal()">Close</button>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Hangman Game with Redis. All rights reserved.</p>
+    </footer>
+</body>
+</html>

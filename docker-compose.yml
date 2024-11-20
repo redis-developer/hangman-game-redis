@@ -1,0 +1,63 @@
+services:
+
+  frontend:
+    container_name: hangman-game-redis-frontend
+    hostname: hangman-game-redis-frontend
+    image: nginx:latest
+    depends_on:
+      - backend-apis
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: curl --fail http://localhost/hangman-game-redis || exit 1
+      interval: 10s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
+    volumes:
+      - ./game/:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/local-js.sh:/docker-entrypoint.d/local-js.sh
+    environment:
+      LOCAL_WORDS_API: "http://localhost:8081/backend-apis/api/v1/words"
+      LOCAL_PLAYER_API: "http://localhost:8081/backend-apis/api/v1/players"
+      LOCAL_GAME_API: "http://localhost:8081/backend-apis/api/v1/game"
+      LOCAL_METRICS_API: "http://localhost:8081/backend-apis/api/v1/metrics"
+    command: [ "/bin/sh", "-c", "chmod +x /docker-entrypoint.d/local-js.sh && /docker-entrypoint.sh nginx -g 'daemon off;'" ]
+
+  backend-apis:
+    container_name: hangman-game-redis-backend-apis
+    hostname: hangman-game-redis-backend-apis
+    image: 'hangman-game-redis-backend-apis:latest'
+    depends_on:
+      - redis-database
+    build:
+      context: .
+    ports:
+      - "8081:8081"
+    environment:
+      REDIS_CONNECTION_URL: redis://hangman-game-redis-database:6379
+      ALLOWED_ORIGINS: http://localhost:8080
+    healthcheck:
+      test: "curl --fail --silent http://localhost:8081/backend-apis/api/health | grep -q '\"status\":\"UP\"' || exit 1"
+      interval: 10s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
+
+  redis-database:
+    container_name: hangman-game-redis-database
+    hostname: hangman-game-redis-database
+    image: redis/redis-stack-server:7.4.0-v1
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_ARGS: --save 30 1
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
+    volumes:
+      - ./redis-data:/data

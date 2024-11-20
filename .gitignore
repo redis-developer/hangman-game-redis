@@ -1,3 +1,16 @@
+cloud/.terraform
+cloud/.terraform.lock.hcl
+cloud/terraform.tfstate
+cloud/terraform.tfstate.backup
+cloud/terraform.lock.info
+cloud/terraform.tfvars
+cloud/.terraform.tfstate.lock.info
+cloud/deploy-build.json
+
+.idea
+target
+redis-data
+
 # Compiled class file
 *.class
 
