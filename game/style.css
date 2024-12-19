@@ -139,10 +139,29 @@ body {
     text-transform: uppercase;
     background: #ff0000;
 }
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -5px;
+}
+
 .keyboard button {
     padding: 7px;
-    width: calc(100% / 9 - 5px);
+    margin: 2px;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
 }
+/*.keyboard button {*/
+/*    padding: 7px;*/
+/*    width: calc(100% / 10 - 5px);*/
+/*}*/
 .keyboard button[disabled] {
     pointer-events: none;
     opacity: 0.6;

@@ -166,13 +166,28 @@ const initGame = (button, clickedLetter) => {
     if (correctLetters.length === currentWord.length) return gameOver(true);
 }
 
-// Creating keyboard buttons and adding event listeners
-for (let i = 97; i <= 122; i++) {
-    const button = document.createElement("button");
-    button.innerText = String.fromCharCode(i);
-    keyboardDiv.appendChild(button);
-    button.addEventListener("click", (e) => initGame(e.target, String.fromCharCode(i)));
+// QWERTY layout rows
+const firstRow = "qwertyuiop";
+const secondRow = "asdfghjkl";
+const thirdRow = "zxcvbnm";
+
+// Function to create buttons for a given row
+const createRow = (row) => {
+    const rowDiv = document.createElement("div");
+    rowDiv.classList.add("keyboard-row");
+    for (let i = 0; i < row.length; i++) {
+        const button = document.createElement("button");
+        button.innerText = row[i];
+        rowDiv.appendChild(button);
+        button.addEventListener("click", (e) => initGame(e.target, row[i]));
+    }
+    return rowDiv;
 }
+
+// Creating keyboard rows and adding them to the keyboard container
+keyboardDiv.appendChild(createRow(firstRow));
+keyboardDiv.appendChild(createRow(secondRow));
+keyboardDiv.appendChild(createRow(thirdRow));
 
 // Add keyboard event listener
 document.addEventListener("keydown", (event) => {
@@ -188,7 +203,7 @@ document.addEventListener("keydown", (event) => {
         const key = event.key.toLowerCase();
         // Check if the pressed key is a lowercase letter (a-z)
         if (key >= 'a' && key <= 'z') {
-            const button = Array.from(keyboardDiv.children).find(btn => btn.innerText.toLowerCase() === key);
+            const button = Array.from(keyboardDiv.querySelectorAll("button")).find(btn => btn.innerText.toLowerCase() === key);
             if (button && !button.disabled) {
                 initGame(button, key);
             }
