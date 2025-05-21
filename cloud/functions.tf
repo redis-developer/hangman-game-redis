@@ -526,6 +526,27 @@ resource "aws_lambda_permission" "words_function_api_gateway_trigger" {
   source_arn = "${aws_api_gateway_rest_api.words_api.execution_arn}/${aws_api_gateway_deployment.words_api_prod.stage_name}/*/*"
 }
 
+resource "aws_lambda_permission" "words_function_cloudwatch_trigger" {
+  statement_id = "AllowExecutionFromCloudWatch"
+  action = "lambda:InvokeFunction"
+  principal = "events.amazonaws.com"
+  function_name = aws_lambda_function.words_function.function_name
+  source_arn = aws_cloudwatch_event_rule.words_function_every_minute.arn
+}
+
+resource "aws_cloudwatch_event_rule" "words_function_every_minute" {
+  name = "${random_string.generated.result}-execute-words-function-every-minute"
+  description = "Execute the words function every minute"
+  schedule_expression = "rate(1 minute)"
+}
+
+resource "aws_cloudwatch_event_target" "words_function_every_minute" {
+  rule = aws_cloudwatch_event_rule.words_function_every_minute.name
+  target_id = aws_lambda_function.words_function.function_name
+  arn = aws_lambda_function.words_function.arn
+  input = "{\"message\": \"Wake up...\"}"
+}
+
 ###########################################
 ############ Player Function ##############
 ###########################################
@@ -608,6 +629,27 @@ resource "aws_lambda_permission" "player_function_api_gateway_trigger" {
   principal = "apigateway.amazonaws.com"
   function_name = aws_lambda_function.player_function.function_name
   source_arn = "${aws_api_gateway_rest_api.player_api.execution_arn}/${aws_api_gateway_deployment.player_api_prod.stage_name}/*/*"
+}
+
+resource "aws_lambda_permission" "player_function_cloudwatch_trigger" {
+  statement_id = "AllowExecutionFromCloudWatch"
+  action = "lambda:InvokeFunction"
+  principal = "events.amazonaws.com"
+  function_name = aws_lambda_function.player_function.function_name
+  source_arn = aws_cloudwatch_event_rule.player_function_every_minute.arn
+}
+
+resource "aws_cloudwatch_event_rule" "player_function_every_minute" {
+  name = "${random_string.generated.result}-execute-player-function-every-minute"
+  description = "Execute the player function every minute"
+  schedule_expression = "rate(1 minute)"
+}
+
+resource "aws_cloudwatch_event_target" "player_function_every_minute" {
+  rule = aws_cloudwatch_event_rule.player_function_every_minute.name
+  target_id = aws_lambda_function.player_function.function_name
+  arn = aws_lambda_function.player_function.arn
+  input = "{\"message\": \"Wake up...\"}"
 }
 
 ###########################################
@@ -694,6 +736,27 @@ resource "aws_lambda_permission" "game_function_api_gateway_trigger" {
   source_arn = "${aws_api_gateway_rest_api.game_api.execution_arn}/${aws_api_gateway_deployment.game_api_prod.stage_name}/*/*"
 }
 
+resource "aws_lambda_permission" "game_function_cloudwatch_trigger" {
+  statement_id = "AllowExecutionFromCloudWatch"
+  action = "lambda:InvokeFunction"
+  principal = "events.amazonaws.com"
+  function_name = aws_lambda_function.game_function.function_name
+  source_arn = aws_cloudwatch_event_rule.game_function_every_minute.arn
+}
+
+resource "aws_cloudwatch_event_rule" "game_function_every_minute" {
+  name = "${random_string.generated.result}-execute-game-function-every-minute"
+  description = "Execute the game function every minute"
+  schedule_expression = "rate(1 minute)"
+}
+
+resource "aws_cloudwatch_event_target" "game_function_every_minute" {
+  rule = aws_cloudwatch_event_rule.game_function_every_minute.name
+  target_id = aws_lambda_function.game_function.function_name
+  arn = aws_lambda_function.game_function.arn
+  input = "{\"message\": \"Wake up...\"}"
+}
+
 ###########################################
 ############ Metrics Function #############
 ###########################################
@@ -776,4 +839,25 @@ resource "aws_lambda_permission" "metrics_function_api_gateway_trigger" {
   principal = "apigateway.amazonaws.com"
   function_name = aws_lambda_function.metrics_function.function_name
   source_arn = "${aws_api_gateway_rest_api.metrics_api.execution_arn}/${aws_api_gateway_deployment.metrics_api_prod.stage_name}/*/*"
+}
+
+resource "aws_lambda_permission" "metrics_function_cloudwatch_trigger" {
+  statement_id = "AllowExecutionFromCloudWatch"
+  action = "lambda:InvokeFunction"
+  principal = "events.amazonaws.com"
+  function_name = aws_lambda_function.metrics_function.function_name
+  source_arn = aws_cloudwatch_event_rule.metrics_function_every_minute.arn
+}
+
+resource "aws_cloudwatch_event_rule" "metrics_function_every_minute" {
+  name = "${random_string.generated.result}-execute-metrics-function-every-minute"
+  description = "Execute the metrics function every minute"
+  schedule_expression = "rate(1 minute)"
+}
+
+resource "aws_cloudwatch_event_target" "metrics_function_every_minute" {
+  rule = aws_cloudwatch_event_rule.metrics_function_every_minute.name
+  target_id = aws_lambda_function.metrics_function.function_name
+  arn = aws_lambda_function.metrics_function.arn
+  input = "{\"message\": \"Wake up...\"}"
 }
